@@ -2,6 +2,6 @@
 package config
 
 type Config struct {
-	dbURL           string `json:"db_url"`
-	currentUserName string `json:"current_user_name"`
+	DBURL           string `json:"db_url"`
+	CurrentUserName string `json:"current_user_name"`
 }
