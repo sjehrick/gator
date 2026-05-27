@@ -25,3 +25,17 @@ func Read() (Config, error) {
 
 	return cfg, nil
 }
+
+func (c *Config) SetUser(user string) error {
+	c.CurrentUserName = user
+	err := write(*c)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func write(cfg Config) error {
+	return nil
+}
