@@ -3,22 +3,37 @@ package config
 import (
 	"encoding/json"
 	"os"
+	"fmt"
 )
+
+func getConfigFilePath() (string, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	
+	}
+
+	cfgFile := home + configFileName
+
+	return cfgFile, nil
+}
 
 func Read() (Config, error) {
 	cfg := Config{}
 
-	home, err := os.UserHomeDir()
+	cfgFilePath, err := getConfigFilePath()
 	if err != nil {
 		return cfg, err
 	}
 
-	dat, err := os.ReadFile(home + configFileName)
+	cfgFile, err := os.Open(cfgFilePath)
 	if err != nil {
 		return cfg, err
 	}
 
-	err = json.Unmarshal(dat, &cfg)
+	defer cfgFile.Close()
+
+	err = json.NewDecoder(cfgFile).Decode(&cfg)
 	if err != nil {
 		return cfg, err
 	}
@@ -37,5 +52,23 @@ func (c *Config) SetUser(user string) error {
 }
 
 func write(cfg Config) error {
+	jsonData, err := json.MarshalIndent(cfg, "", " ")
+	if err != nil {
+		return err
+	}
+	
+	cfgFilePath, err := getConfigFilePath()
+		if err != nil {
+		return err
+	}
+
+
+	err = os.WriteFile(cfgFilePath, jsonData, 0644)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("JSON Config saved successfully!\n")
+
 	return nil
 }
