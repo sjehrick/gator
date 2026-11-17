@@ -6,6 +6,10 @@ import (
 	"os"
 )
 
+type state struct {
+	cfg *Config
+}
+
 func main() {
 	cfg, err := config.Read()
 	if err != nil {
