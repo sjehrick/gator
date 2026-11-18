@@ -7,7 +7,7 @@ import (
 )
 
 type state struct {
-	cfg *Config
+	cfg *config
 }
 
 func main() {
